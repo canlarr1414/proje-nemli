@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fenerbahçe Bilet Sistemi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --fb-blue: #002868;
+      --fb-yellow: #ffd700;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background: var(--fb-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+    }
+    header img {
+      height: 50px;
+    }
+    nav {
+      background: var(--fb-yellow);
+      text-align: center;
+      padding: 0.5rem;
+    }
+    nav button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      background: var(--fb-blue);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      margin: 2rem auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button[type="submit"] {
+      background-color: var(--fb-blue);
+      color: white;
+      font-weight: bold;
+      border: none;
+    }
+    button[type="submit"]:hover {
+      background-color: #001f4d;
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      background: var(--fb-blue);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .login-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--fb-blue), var(--fb-yellow));
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-box img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Giriş Sayfası -->
+<div id="loginPage" class="login-page">
+  <div class="login-box">
+    <img src="Fenerbahçe.png" alt="FB" />
+    <h2>Fenerbahçe Giriş</h2>
+    <input type="text" id="username" placeholder="Kullanıcı Adı" />
+    <input type="password" id="password" placeholder="Şifre" />
+    <button onclick="login()">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- Ana Sayfa -->
+<div id="mainPage" class="hidden">
+  <header>
+    <h1>Fenerbahçe Bilet Sistemi</h1>
+    <img src="Fenerbahçe.png" alt="Fenerbahçe" />
+  </header>
+
+  <nav>
+    <button onclick="showSection('rezervasyon')">Bilet Al</button>
+    <button onclick="showSection('kontrol')">Durum Sorgula</button>
+    <button onclick="logout()">Çıkış</button>
+  </nav>
+
+  <!-- Rezervasyon Formu -->
+  <div id="rezervasyon" class="container">
+    <h2>Bilet Rezervasyonu</h2>
+    <form id="rezForm">
+      <input type="text" id="adsoyad" placeholder="Ad Soyad" required />
+      <input type="email" id="email" placeholder="E-posta" required />
+      <select id="match" required>
+        <option value="">Maç Seçiniz</option>
+        <option value="FB - Galatasaray">Fenerbahçe vs Galatasaray</option>
+        <option value="FB - Beşiktaş">Fenerbahçe vs Beşiktaş</option>
+      </select>
+      <select id="tribun" required>
+        <option value="">Tribün Seçiniz</option>
+        <option value="Maraton">Maraton</option>
+        <option value="VIP">VIP</option>
+        <option value="Kale Arkası">Kale Arkası</option>
+      </select>
+      <button type="submit">Rezervasyon Yap</button>
+    </form>
+  </div>
+
+  <!-- Sorgulama -->
+  <div id="kontrol" class="container hidden">
+    <h2>Rezervasyon Sorgulama</h2>
+    <form id="kontrolForm">
+      <input type="email" id="kontrolEmail" placeholder="E-posta girin" required />
+      <button type="submit">Sorgula</button>
+    </form>
+    <div id="sonuc" style="margin-top: 1rem;"></div>
+  </div>
+
+  <footer>
+    © 2025 Fenerbahçe Bilet Sistemi
+  </footer>
+</div>
+
+<script>
+  function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    if (user && pass) {
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("mainPage").classList.remove("hidden");
+    } else {
+      alert("Lütfen kullanıcı adı ve şifre girin.");
+    }
+  }
+
+  function logout() {
+    document.getElementById("mainPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+  }
+
+  function showSection(id) {
+    document.getElementById("rezervasyon").classList.add("hidden");
+    document.getElementById("kontrol").classList.add("hidden");
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  document.getElementById("rezForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const data = {
+      adsoyad: document.getElementById("adsoyad").value,
+      match: document.getElementById("match").value,
+      tribun: document.getElementById("tribun").value,
+      durum: "Onaylandı"
+    };
+    localStorage.setItem("rez_" + email, JSON.stringify(data));
+    alert("Rezervasyon başarıyla yapıldı!");
+    this.reset();
+  });
+
+  document.getElementById("kontrolForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("kontrolEmail").value;
+    const data = localStorage.getItem("rez_" + email);
+    const sonuc = document.getElementById("sonuc");
+    if (data) {
+      const rez = JSON.parse(data);
+      sonuc.innerHTML = `
+        <strong>Ad Soyad:</strong> ${rez.adsoyad}<br>
+        <strong>Maç:</strong> ${rez.match}<br>
+        <strong>Tribün:</strong> ${rez.tribun}<br>
+        <strong>Durum:</strong> ${rez.durum}
+      `;
+    } else {
+      sonuc.innerHTML = `<span style="color:red;">Rezervasyon bulunamadı.</span>`;
+    }
+  });
+</script>
+
+</body>
+</html>
